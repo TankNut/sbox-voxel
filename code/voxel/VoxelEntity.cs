@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace Kv6
+namespace Voxel
 {
 	public partial class VoxelEntity : Prop
 	{
@@ -14,12 +14,12 @@ namespace Kv6
 		{
 			if ( Model != "" && Model != _lastModel )
 			{
-				VoxelModel model = VoxelBuilder.Models[Model];
+				VoxelModel model = VoxelManager.Models[Model];
 
 				SetModel( model.Model );
 				SetupPhysicsFromOBB( PhysicsMotionType.Dynamic, model.Bounds.Mins, model.Bounds.Maxs );
 
-				PhysicsBody.Mass = model.Bounds.Volume * model.Scale;
+				PhysicsBody.Mass = model.Volume;
 				PhysicsBody.RebuildMass();
 
 				_lastModel = Model;
@@ -28,13 +28,13 @@ namespace Kv6
 			//DebugOverlay.Axis( Position, Rotation, depthTest: false );
 		}
 
-		[ServerCmd( "spawn_kv6" )]
+		[ServerCmd( "spawn_voxel" )]
 		public static void SpawnEntity( string model )
 		{
 			if ( ConsoleSystem.Caller == null )
 				return;
 
-			if ( !VoxelBuilder.Models.ContainsKey( model ) )
+			if ( !VoxelManager.Models.ContainsKey( model ) )
 				return;
 
 			SandboxPlayer pawn = ConsoleSystem.Caller.Pawn as SandboxPlayer;

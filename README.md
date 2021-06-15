@@ -2,9 +2,18 @@
 A set of library classes for s&amp;box to create runtime voxel models
 
 ## Installing
-Merge the files with your gamemode however you want, for developing I have the two kv6 folders symlinked into my local copy of [facepunch/sandbox](https://github.com/Facepunch/sandbox)
+Merge the files with your gamemode however you want, for developing I have the two voxel folders symlinked into my local copy of [facepunch/sandbox](https://github.com/Facepunch/sandbox)
+
+## Supported formats
+
+|Format|File Signature|Extension|Notes|
+|---|---|---|---|
+|Voxlap|"Kvxl"|.kv6||
+|MagicaVoxel|"VOX "|.vox|Only RGBA and XYZI chunks are handled, multiple XYZI chunks should work but haven't been tested|
 
 ## Usage
+Models can be manually built and registered through the following method:
+
 ```cs
 VoxelBuilder builder = new();
 
@@ -18,11 +27,11 @@ builder.Set( 1, 0, 10, new Color32( 0, 0, 255 ) );
 builder.Set( 0, 1, 10, new Color32( 0, 0, 255 ) );
 builder.Set( 1, 1, 10, new Color32( 0, 0, 255 ) );
 
-builder.Build( "test", 8.0f );
+VoxelManager.RegisterModel("test", builder.Build( 8.0f ));
 ```
 
-This will result in the following prop when spawned with `spawn_kv6`
+This will result in the following prop when spawned with `spawn_voxel`
 
 ![example.png](https://github.com/TankNut/sbox-voxel/blob/master/example.png?raw=true)
 
-Check out [Kv6Loader.cs](Kv6Loader.cs) for more examples
+If you want to load external files you can use one of the existing importers or create your own by implementing `IVoxelLoader` into your class and registering it through `VoxelManager.RegisterLoader(string signature, IVoxelLoader loader)`, after that you'll be able to load your models through any of the `VoxelManager.LoadFrom*` functions
