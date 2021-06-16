@@ -18,8 +18,6 @@ namespace Voxel
 			public int y;
 			public int z;
 
-			public override int GetHashCode() => HashCode.Combine( x, y, z );
-
 			public Vector3 Vector => new Vector3( x, y, z );
 
 			public VoxelPosition( int x, int y, int z )
@@ -27,6 +25,15 @@ namespace Voxel
 				this.x = x;
 				this.y = y;
 				this.z = z;
+			}
+
+			public override int GetHashCode() => HashCode.Combine( x, y, z );
+
+			public override bool Equals( object obj ) => obj is VoxelPosition other && Equals( other );
+
+			public bool Equals( VoxelPosition other )
+			{
+				return x == other.x && y == other.y && z == other.z;
 			}
 		}
 
