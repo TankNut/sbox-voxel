@@ -42,7 +42,7 @@ namespace Voxel
 			LoadFromFile( "voxel/props/cp.kv6", 8.0f );
 			LoadFromFile( "voxel/props/intel.kv6", 4.0f );
 
-			LoadFromFile( "voxel/monu1.vox", 1.0f );
+			LoadFromFolder( "voxel/monu", 1.0f );
 
 			VoxelBuilder builder = new();
 
