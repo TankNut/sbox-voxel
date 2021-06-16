@@ -37,12 +37,12 @@ namespace Voxel
 			RegisterLoader( "Kvxl", new Kv6Loader() );
 			RegisterLoader( "VOX ", new MagicaLoader() );
 
-			LoadFromFolder( "kv6/weapons", 1.0f );
+			LoadFromFolder( "voxel/weapons", 1.0f );
 
-			LoadFromFile( "kv6/props/cp.kv6", 8.0f );
-			LoadFromFile( "kv6/props/intel.kv6", 4.0f );
+			LoadFromFile( "voxel/props/cp.kv6", 8.0f );
+			LoadFromFile( "voxel/props/intel.kv6", 4.0f );
 
-			LoadFromFile( "kv6/monu1.vox", 1.0f );
+			LoadFromFile( "voxel/monu1.vox", 1.0f );
 
 			VoxelBuilder builder = new();
 
