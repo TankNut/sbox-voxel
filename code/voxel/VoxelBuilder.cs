@@ -172,7 +172,7 @@ namespace Voxel
 
 			return new VoxelModel()
 			{
-				Model = Model.Create( mesh ),
+				Model = new ModelBuilder().AddMesh( mesh ).Create(),
 				Bounds = new BBox( mins, maxs ),
 				Volume = vertices.Count
 			};
