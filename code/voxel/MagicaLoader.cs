@@ -83,7 +83,8 @@ namespace Voxel
 					case SIZE:
 						uint x = stream.ReadStructureFromStream<uint>();
 						uint y = stream.ReadStructureFromStream<uint>();
-						uint z = stream.ReadStructureFromStream<uint>();
+
+						_ = stream.ReadStructureFromStream<uint>();
 
 						builder.Pivot = new Vector3( x * 0.5f, y * 0.5f, -0.5f );
 
@@ -96,7 +97,7 @@ namespace Voxel
 
 			foreach ( MagicaVoxel voxel in voxels )
 			{
-				builder.Set( voxel.x, voxel.y, voxel.z, new Color32( colors[voxel.ColorIndex] ) );
+				builder.Set( voxel.x, voxel.y, voxel.z, new Color( colors[voxel.ColorIndex] ) );
 			}
 
 			return builder.Build();

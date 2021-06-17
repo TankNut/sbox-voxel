@@ -45,15 +45,15 @@ namespace Voxel
 
 			VoxelBuilder builder = new();
 
-			builder.Set( 0, 0, 0, new Color32( 255, 0, 0 ) );
-			builder.Set( 1, 0, 0, new Color32( 255, 0, 0 ) );
-			builder.Set( 0, 1, 0, new Color32( 0, 255, 0 ) );
-			builder.Set( 1, 1, 0, new Color32( 0, 255, 0 ) );
+			builder.Set( 0, 0, 0, new Color( 1, 0, 0 ) );
+			builder.Set( 1, 0, 0, new Color( 1, 0, 0 ) );
+			builder.Set( 0, 1, 0, new Color( 0, 1, 0 ) );
+			builder.Set( 1, 1, 0, new Color( 0, 1, 0 ) );
 
-			builder.Set( 0, 0, 10, new Color32( 0, 0, 255 ) );
-			builder.Set( 1, 0, 10, new Color32( 0, 0, 255 ) );
-			builder.Set( 0, 1, 10, new Color32( 0, 0, 255 ) );
-			builder.Set( 1, 1, 10, new Color32( 0, 0, 255 ) );
+			builder.Set( 0, 0, 10, new Color( 0, 0, 1 ) );
+			builder.Set( 1, 0, 10, new Color( 0, 0, 1 ) );
+			builder.Set( 0, 1, 10, new Color( 0, 0, 1 ) );
+			builder.Set( 1, 1, 10, new Color( 0, 0, 1 ) );
 
 			RegisterModel( "test", builder.Build() );
 		}

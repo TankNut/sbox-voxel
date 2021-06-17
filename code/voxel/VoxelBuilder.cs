@@ -67,7 +67,7 @@ namespace Voxel
 
 		private struct VoxelData
 		{
-			public Color32 Color;
+			public Color Color;
 			public VoxelPosition Position;
 		}
 
@@ -76,7 +76,7 @@ namespace Voxel
 			return _data.ContainsKey( new VoxelPosition( x, y, z ) );
 		}
 
-		public void Set( int x, int y, int z, Color32 color )
+		public void Set( int x, int y, int z, Color color )
 		{
 			VoxelPosition position = new( x, y, z );
 
@@ -137,15 +137,15 @@ namespace Voxel
 			return Tuple.Create( vertices, mins, maxs );
 		}
 
-		private static void CreateQuad( List<VoxelVertex> vertices, Ray origin, Vector3 width, Vector3 height, Color32 color )
+		private static void CreateQuad( List<VoxelVertex> vertices, Ray origin, Vector3 width, Vector3 height, Color color )
 		{
 			Vector3 normal = origin.Direction;
 			Vector4 tangent = new Vector4( width.Normal, 1 );
 
-			VoxelVertex a = new VoxelVertex( origin.Origin - width - height, normal, tangent, new Vector2( 0, 0 ), new Color( color.RGBA ) );
-			VoxelVertex b = new VoxelVertex( origin.Origin + width - height, normal, tangent, new Vector2( 1, 0 ), new Color( color.RGBA ) );
-			VoxelVertex c = new VoxelVertex( origin.Origin + width + height, normal, tangent, new Vector2( 1, 1 ), new Color( color.RGBA ) );
-			VoxelVertex d = new VoxelVertex( origin.Origin - width + height, normal, tangent, new Vector2( 0, 1 ), new Color( color.RGBA ) );
+			VoxelVertex a = new VoxelVertex( origin.Origin - width - height, normal, tangent, new Vector2( 0, 0 ), color );
+			VoxelVertex b = new VoxelVertex( origin.Origin + width - height, normal, tangent, new Vector2( 1, 0 ), color );
+			VoxelVertex c = new VoxelVertex( origin.Origin + width + height, normal, tangent, new Vector2( 1, 1 ), color );
+			VoxelVertex d = new VoxelVertex( origin.Origin - width + height, normal, tangent, new Vector2( 0, 1 ), color );
 
 			vertices.Add( a );
 			vertices.Add( b );

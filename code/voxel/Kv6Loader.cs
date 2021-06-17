@@ -49,7 +49,7 @@ namespace Voxel
 
 						byte[] bytes = BitConverter.GetBytes( block.Color );
 
-						builder.Set( x, (int)header.SizeY - y - 1, (int)header.SizeZ - block.ZPos - 1, new Color32( bytes[2], bytes[1], bytes[0] ) );
+						builder.Set( x, (int)header.SizeY - y - 1, (int)header.SizeZ - block.ZPos - 1, new Color( (float)bytes[2] / 255, (float)bytes[1] / 255, (float)bytes[0] / 255 ) );
 
 						index++;
 					}
