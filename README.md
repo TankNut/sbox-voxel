@@ -9,7 +9,7 @@ Merge the files with your gamemode however you want, for developing I have the t
 |Format|File Signature|Extension|Notes|
 |---|---|---|---|
 |Voxlap|"Kvxl"|.kv6||
-|MagicaVoxel|"VOX "|.vox|Only RGBA and XYZI chunks are handled, multiple XYZI chunks should work but haven't been tested|
+|MagicaVoxel|"VOX "|.vox|Only RGBA, SIZE and XYZI chunks are handled, multiple XYZI chunks should work but haven't been tested|
 
 ## Usage
 Models can be manually built and registered through the following method:
