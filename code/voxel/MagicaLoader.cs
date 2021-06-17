@@ -8,6 +8,7 @@ namespace Voxel
 	{
 		private const uint XYZI = 1230657880;
 		private const uint RGBA = 1094862674;
+		private const uint SIZE = 1163544915;
 
 		private static readonly uint[] _defaultColors = new uint[] {
 			0x00000000, 0xffffffff, 0xffccffff, 0xff99ffff, 0xff66ffff, 0xff33ffff, 0xff00ffff, 0xffffccff, 0xffccccff, 0xff99ccff, 0xff66ccff, 0xff33ccff, 0xff00ccff, 0xffff99ff, 0xffcc99ff, 0xff9999ff,
@@ -77,6 +78,14 @@ namespace Voxel
 						{
 							colors[i] = stream.ReadStructureFromStream<uint>();
 						}
+
+						break;
+					case SIZE:
+						uint x = stream.ReadStructureFromStream<uint>();
+						uint y = stream.ReadStructureFromStream<uint>();
+						uint z = stream.ReadStructureFromStream<uint>();
+
+						builder.Pivot = new Vector3( x * 0.5f, y * 0.5f, -0.5f );
 
 						break;
 					default:
