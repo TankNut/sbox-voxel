@@ -31,7 +31,6 @@ namespace Voxel
 			Loaders[BitConverter.ToUInt32( Encoding.Default.GetBytes( signature ), 0 )] = loader;
 		}
 
-		[Event.Hotload]
 		public static void Load()
 		{
 			RegisterLoader( "Kvxl", new Kv6Loader() );
