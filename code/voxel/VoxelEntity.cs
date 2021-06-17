@@ -6,8 +6,12 @@ namespace Voxel
 	{
 		[Net]
 		public string Model { get; set; }
+		public VoxelModel VoxelModel => VoxelManager.Models[Model];
 
 		private string _lastModel;
+
+		[ClientVar( "voxel_debug" )]
+		public static bool Debug { get; set; }
 
 		[Event.Tick]
 		public void Tick()
@@ -22,7 +26,15 @@ namespace Voxel
 				_lastModel = Model;
 			}
 
-			//DebugOverlay.Axis( Position, Rotation, depthTest: false );
+			if ( IsClient && Debug )
+			{
+				DebugOverlay.Text( Position,
+					$"Model: {Model}\n" +
+					$"Blocks: {VoxelModel.Volume:n0}\n" +
+					$"Vertices: {VoxelModel.Vertices:n0}", Color.Red );
+
+				DebugOverlay.Axis( Position, Rotation, depthTest: false );
+			}
 		}
 
 		[ServerCmd( "spawn_voxel" )]

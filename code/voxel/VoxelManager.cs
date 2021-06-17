@@ -10,6 +10,8 @@ namespace Voxel
 	{
 		public Model Model;
 		public BBox Bounds;
+		public int Volume;
+		public int Vertices;
 	}
 
 	public static class VoxelManager

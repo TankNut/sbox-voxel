@@ -181,6 +181,9 @@ namespace Voxel
 			return new VoxelModel()
 			{
 				Model = builder.Create(),
+				Bounds = box,
+				Volume = _data.Count,
+				Vertices = vertices.Count
 			};
 		}
 	}
