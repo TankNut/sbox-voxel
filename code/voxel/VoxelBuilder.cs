@@ -87,7 +87,7 @@ namespace Voxel
 			};
 		}
 
-		private Tuple<VertexBufferHandle<VoxelVertex>, Vector3, Vector3> GenerateMesh( float scale )
+		private Tuple<List<VoxelVertex>, Vector3, Vector3> GenerateMesh()
 		{
 			Vector3 mins = new Vector3( float.MaxValue );
 			Vector3 maxs = new Vector3( float.MinValue );
@@ -112,13 +112,11 @@ namespace Voxel
 
 				Rotation rot = Rotation.Identity;
 
-				var f = rot.Forward * scale * 0.5f;
-				var l = rot.Left * scale * 0.5f;
-				var u = rot.Up * scale * 0.5f;
+				var f = rot.Forward * 0.5f;
+				var l = rot.Left * 0.5f;
+				var u = rot.Up * 0.5f;
 
 				Vector3 position = new Vector3( x, y, z ) - Pivot;
-
-				position *= scale;
 
 				if ( !Exists( x + 1, y, z ) )
 					CreateQuad( vertices, new Ray( position + f, f.Normal ), l, u, voxelData.Color );
@@ -136,11 +134,7 @@ namespace Voxel
 					CreateQuad( vertices, new Ray( position - u, -u.Normal ), f, -l, voxelData.Color );
 			}
 
-			VertexBufferHandle<VoxelVertex> handle = new( vertices.Count, VoxelVertex.Layout );
-
-			handle.SetData( vertices.ToArray() );
-
-			return Tuple.Create( handle, mins, maxs );
+			return Tuple.Create( vertices, mins, maxs );
 		}
 
 		private static void CreateQuad( List<VoxelVertex> vertices, Ray origin, Vector3 width, Vector3 height, Color32 color )
@@ -162,26 +156,25 @@ namespace Voxel
 			vertices.Add( a );
 		}
 
-		public VoxelModel Build( float scale )
+		public VoxelModel Build()
 		{
-			var tuple = GenerateMesh( scale );
+			var tuple = GenerateMesh();
 
-			Vector3 mins = (tuple.Item2 - Pivot - new Vector3( 0.5f )) * scale;
-			Vector3 maxs = (tuple.Item3 - Pivot + new Vector3( 0.5f )) * scale;
+			Vector3 mins = (tuple.Item2 - Pivot - new Vector3( 0.5f ));
+			Vector3 maxs = (tuple.Item3 - Pivot + new Vector3( 0.5f ));
 
-			VertexBufferHandle<VoxelVertex> handle = tuple.Item1;
+			List<VoxelVertex> vertices = tuple.Item1;
 
 			Mesh mesh = Mesh.Create( Material.Load( "materials/default/vertex_color.vmat" ) );
 
-			mesh.SetVertexBuffer( handle );
+			mesh.CreateVertexBuffer<VoxelVertex>( vertices.Count, VoxelVertex.Layout, vertices.ToArray() );
 			mesh.SetBounds( mins, maxs );
 
 			return new VoxelModel()
 			{
 				Model = Model.Create( mesh ),
 				Bounds = new BBox( mins, maxs ),
-				Scale = scale,
-				Volume = handle.MaxElementCount * scale
+				Volume = vertices.Count
 			};
 		}
 	}

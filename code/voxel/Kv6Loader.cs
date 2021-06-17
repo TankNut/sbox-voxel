@@ -26,7 +26,7 @@ namespace Voxel
 		}
 #pragma warning restore CS0649
 
-		public VoxelModel Load( Stream stream, float scale )
+		public VoxelModel Load( Stream stream )
 		{
 			Kv6Header header = stream.ReadStructureFromStream<Kv6Header>();
 			Kv6Block[] blocks = stream.ReadStructuresFromStream<Kv6Block>( header.BlockCount );
@@ -54,7 +54,7 @@ namespace Voxel
 						index++;
 					}
 
-			return builder.Build( scale );
+			return builder.Build();
 		}
 	}
 }

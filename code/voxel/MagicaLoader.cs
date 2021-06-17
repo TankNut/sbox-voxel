@@ -45,7 +45,7 @@ namespace Voxel
 		}
 #pragma warning restore CS0649
 
-		public VoxelModel Load( Stream stream, float scale )
+		public VoxelModel Load( Stream stream )
 		{
 			_ = stream.ReadStructureFromStream<uint>();
 
@@ -90,7 +90,7 @@ namespace Voxel
 				builder.Set( voxel.x, voxel.y, voxel.z, new Color32( colors[voxel.ColorIndex] ) );
 			}
 
-			return builder.Build( scale );
+			return builder.Build();
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Voxel
 				SetModel( model.Model );
 				SetupPhysicsFromOBB( PhysicsMotionType.Dynamic, model.Bounds.Mins, model.Bounds.Maxs );
 
-				PhysicsBody.Mass = model.Volume;
+				PhysicsBody.Mass = model.Volume * Scale;
 				PhysicsBody.RebuildMass();
 
 				_lastModel = Model;
@@ -29,7 +29,7 @@ namespace Voxel
 		}
 
 		[ServerCmd( "spawn_voxel" )]
-		public static void SpawnEntity( string model )
+		public static void SpawnEntity( string model, float scale = 1 )
 		{
 			if ( ConsoleSystem.Caller == null )
 				return;
@@ -41,7 +41,7 @@ namespace Voxel
 
 			TraceResult trace = Trace.Ray( pawn.EyePos, pawn.EyePos + pawn.EyeRot.Forward * 5000.0f ).UseHitboxes().Ignore( pawn ).Run();
 
-			VoxelEntity entity = new() { Model = model };
+			VoxelEntity entity = new() { Model = model, Scale = scale };
 
 			entity.Position = trace.EndPos + trace.Normal;
 		}

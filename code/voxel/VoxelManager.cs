@@ -37,12 +37,12 @@ namespace Voxel
 			RegisterLoader( "Kvxl", new Kv6Loader() );
 			RegisterLoader( "VOX ", new MagicaLoader() );
 
-			LoadFromFolder( "voxel/weapons", 1.0f );
+			LoadFromFolder( "voxel/weapons" );
 
-			LoadFromFile( "voxel/props/cp.kv6", 8.0f );
-			LoadFromFile( "voxel/props/intel.kv6", 4.0f );
+			LoadFromFile( "voxel/props/cp.kv6" );
+			LoadFromFile( "voxel/props/intel.kv6" );
 
-			LoadFromFolder( "voxel/monu", 1.0f );
+			LoadFromFolder( "voxel/monu" );
 
 			VoxelBuilder builder = new();
 
@@ -56,16 +56,16 @@ namespace Voxel
 			builder.Set( 0, 1, 10, new Color32( 0, 0, 255 ) );
 			builder.Set( 1, 1, 10, new Color32( 0, 0, 255 ) );
 
-			RegisterModel( "test", builder.Build( 8.0f ) );
+			RegisterModel( "test", builder.Build() );
 		}
 
-		public static void LoadFromFolder( string folder, float scale )
+		public static void LoadFromFolder( string folder )
 		{
 			foreach ( var file in FileSystem.Mounted.FindFile( folder, "*" ) )
-				LoadFromFile( $"{folder}/{file}", scale );
+				LoadFromFile( $"{folder}/{file}" );
 		}
 
-		public static void LoadFromFile( string filename, float scale )
+		public static void LoadFromFile( string filename )
 		{
 			string name = Path.GetFileNameWithoutExtension( filename );
 
@@ -84,7 +84,7 @@ namespace Voxel
 
 			Log.Info( $"[Voxel] Matching signature found for {loader.GetType()}" );
 
-			Models[name] = loader.Load( stream, scale );
+			Models[name] = loader.Load( stream );
 		}
 	}
 }
