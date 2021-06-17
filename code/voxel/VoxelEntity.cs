@@ -17,10 +17,7 @@ namespace Voxel
 				VoxelModel model = VoxelManager.Models[Model];
 
 				SetModel( model.Model );
-				SetupPhysicsFromOBB( PhysicsMotionType.Dynamic, model.Bounds.Mins, model.Bounds.Maxs );
-
-				PhysicsBody.Mass = model.Volume * Scale;
-				PhysicsBody.RebuildMass();
+				SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 
 				_lastModel = Model;
 			}
