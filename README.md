@@ -17,20 +17,20 @@ Models can be manually built and registered through the following method:
 ```cs
 VoxelBuilder builder = new();
 
-builder.Set( 0, 0, 0, new Color32( 255, 0, 0 ) );
-builder.Set( 1, 0, 0, new Color32( 255, 0, 0 ) );
-builder.Set( 0, 1, 0, new Color32( 0, 255, 0 ) );
-builder.Set( 1, 1, 0, new Color32( 0, 255, 0 ) );
+builder.Set( 0, 0, 0, new Color( 1, 0, 0 ) );
+builder.Set( 1, 0, 0, new Color( 1, 0, 0 ) );
+builder.Set( 0, 1, 0, new Color( 0, 1, 0 ) );
+builder.Set( 1, 1, 0, new Color( 0, 1, 0 ) );
 
-builder.Set( 0, 0, 10, new Color32( 0, 0, 255 ) );
-builder.Set( 1, 0, 10, new Color32( 0, 0, 255 ) );
-builder.Set( 0, 1, 10, new Color32( 0, 0, 255 ) );
-builder.Set( 1, 1, 10, new Color32( 0, 0, 255 ) );
+builder.Set( 0, 0, 10, new Color( 0, 0, 1 ) );
+builder.Set( 1, 0, 10, new Color( 0, 0, 1 ) );
+builder.Set( 0, 1, 10, new Color( 0, 0, 1 ) );
+builder.Set( 1, 1, 10, new Color( 0, 0, 1 ) );
 
-VoxelManager.RegisterModel("test", builder.Build( 8.0f ));
+VoxelManager.RegisterModel("test", builder.Build());
 ```
 
-This will result in the following prop when spawned with `spawn_voxel`
+This will result in the following prop when spawned with `spawn_voxel test 8`
 
 ![example.png](https://github.com/TankNut/sbox-voxel/blob/master/example.png?raw=true)
 
