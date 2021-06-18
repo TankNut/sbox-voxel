@@ -10,6 +10,9 @@ namespace Voxel
 		public ImageFormat ColorFormat;
 		public Vector3 Pivot { get; set; }
 
+		public Vector3 Mins { get; private set; } = new Vector3( float.MaxValue );
+		public Vector3 Maxs { get; private set; } = new Vector3( float.MinValue );
+
 		private Dictionary<VoxelPosition, VoxelData> _data = new();
 
 		private struct VoxelPosition
@@ -80,6 +83,9 @@ namespace Voxel
 		{
 			VoxelPosition position = new( x, y, z );
 
+			Mins = new Vector3( Math.Min( Mins.x, x ), Math.Min( Mins.y, y ), Math.Min( Mins.z, z ) );
+			Maxs = new Vector3( Math.Max( Maxs.x, x ), Math.Max( Maxs.y, y ), Math.Max( Maxs.z, z ) );
+
 			_data[position] = new VoxelData()
 			{
 				Color = color,
@@ -87,11 +93,8 @@ namespace Voxel
 			};
 		}
 
-		private Tuple<List<VoxelVertex>, Vector3, Vector3> GenerateMesh()
+		private List<VoxelVertex> GenerateMesh()
 		{
-			Vector3 mins = new Vector3( float.MaxValue );
-			Vector3 maxs = new Vector3( float.MinValue );
-
 			List<VoxelVertex> vertices = new();
 
 			foreach ( KeyValuePair<VoxelPosition, VoxelData> pair in _data )
@@ -101,14 +104,6 @@ namespace Voxel
 				int x = voxelData.Position.x;
 				int y = voxelData.Position.y;
 				int z = voxelData.Position.z;
-
-				mins.x = Math.Min( mins.x, x );
-				mins.y = Math.Min( mins.y, y );
-				mins.z = Math.Min( mins.z, z );
-
-				maxs.x = Math.Max( maxs.x, x );
-				maxs.y = Math.Max( maxs.y, y );
-				maxs.z = Math.Max( maxs.z, z );
 
 				Rotation rot = Rotation.Identity;
 
@@ -134,7 +129,7 @@ namespace Voxel
 					CreateQuad( vertices, new Ray( position - u, -u.Normal ), f, -l, voxelData.Color );
 			}
 
-			return Tuple.Create( vertices, mins, maxs );
+			return vertices;
 		}
 
 		private static void CreateQuad( List<VoxelVertex> vertices, Ray origin, Vector3 width, Vector3 height, Color color )
@@ -158,12 +153,10 @@ namespace Voxel
 
 		public VoxelModel Build()
 		{
-			var tuple = GenerateMesh();
+			Vector3 mins = (Mins - Pivot - new Vector3( 0.5f ));
+			Vector3 maxs = (Maxs - Pivot + new Vector3( 0.5f ));
 
-			Vector3 mins = (tuple.Item2 - Pivot - new Vector3( 0.5f ));
-			Vector3 maxs = (tuple.Item3 - Pivot + new Vector3( 0.5f ));
-
-			List<VoxelVertex> vertices = tuple.Item1;
+			List<VoxelVertex> vertices = GenerateMesh();
 
 			Mesh mesh = Mesh.Create( Material.Load( "materials/default/vertex_color.vmat" ) );
 
