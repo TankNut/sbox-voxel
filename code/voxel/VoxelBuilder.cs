@@ -170,13 +170,13 @@ namespace Voxel
 			mesh.CreateVertexBuffer<VoxelVertex>( vertices.Count, VoxelVertex.Layout, vertices.ToArray() );
 			mesh.SetBounds( mins, maxs );
 
-			ModelBuilder builder = new ModelBuilder();
+			ModelBuilder builder = Model.Builder;
 
 			BBox box = new BBox( mins, maxs );
 
 			builder.AddMesh( mesh );
-			builder.Physics.AddBox( box.Size * 0.5f, box.Center );
-			builder.Physics.WithMass( _data.Count );
+			builder.AddCollisionBox( box.Size * 0.5f, box.Center );
+			builder.WithMass( _data.Count );
 
 			return new VoxelModel()
 			{
