@@ -158,12 +158,12 @@ namespace Voxel
 
 			List<VoxelVertex> vertices = GenerateMesh();
 
-			Mesh mesh = Mesh.Create( Material.Load( "materials/default/vertex_color.vmat" ) );
+			Mesh mesh = new Mesh( Material.Load( "materials/default/vertex_color.vmat" ) );
 
 			mesh.CreateVertexBuffer<VoxelVertex>( vertices.Count, VoxelVertex.Layout, vertices.ToArray() );
 			mesh.SetBounds( mins, maxs );
 
-			ModelBuilder builder = Model.Builder;
+			ModelBuilder builder = new ModelBuilder();
 
 			BBox box = new BBox( mins, maxs );
 
