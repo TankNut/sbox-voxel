@@ -153,10 +153,15 @@ namespace Voxel
 
 		public VoxelModel Build()
 		{
-			Vector3 mins = (Mins - Pivot - new Vector3( 0.5f ));
-			Vector3 maxs = (Maxs - Pivot + new Vector3( 0.5f ));
+			VoxelManager.Log( $"Pivot: {Pivot}", LogLevel.Debug, "Builder" );
+			VoxelManager.Log( $"Blocks: {_data.Count}", LogLevel.Debug, "Builder" );
+
+			Vector3 mins = Mins - Pivot - new Vector3( 0.5f );
+			Vector3 maxs = Maxs - Pivot + new Vector3( 0.5f );
 
 			List<VoxelVertex> vertices = GenerateMesh();
+
+			VoxelManager.Log( $"Vertices: {vertices.Count}", LogLevel.Debug, "Builder" );
 
 			Mesh mesh = new Mesh( Material.Load( "materials/default/vertex_color.vmat" ) );
 

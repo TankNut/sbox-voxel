@@ -10,9 +10,6 @@ namespace Voxel
 
 		private string _lastModel;
 
-		[ClientVar( "voxel_debug" )]
-		public static bool Debug { get; set; }
-
 		[Event.Tick]
 		public void Tick()
 		{
@@ -26,7 +23,7 @@ namespace Voxel
 				_lastModel = Model;
 			}
 
-			if ( IsClient && Debug )
+			if ( IsClient && VoxelManager.Debug >= (int)LogLevel.Info )
 			{
 				DebugOverlay.Text( Position,
 					$"Model: {Model}\n" +

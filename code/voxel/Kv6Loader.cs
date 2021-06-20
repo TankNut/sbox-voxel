@@ -29,6 +29,9 @@ namespace Voxel
 		public VoxelModel Load( Stream stream )
 		{
 			Kv6Header header = stream.ReadStructureFromStream<Kv6Header>();
+
+			VoxelManager.Log( $"Reading {header.BlockCount} blocks from stream", LogLevel.Debug, "Kv6" );
+
 			Kv6Block[] blocks = stream.ReadStructuresFromStream<Kv6Block>( header.BlockCount );
 
 			_ = stream.ReadStructuresFromStream<uint>( header.SizeX );

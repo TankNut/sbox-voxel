@@ -62,6 +62,8 @@ namespace Voxel
 				switch ( chunk.Id )
 				{
 					case XYZI:
+						VoxelManager.Log( "Found XYZI chunk", LogLevel.Debug, "Magica" );
+
 						uint count = stream.ReadStructureFromStream<uint>();
 
 						for ( int i = 0; i < count; i++ )
@@ -71,6 +73,8 @@ namespace Voxel
 
 						break;
 					case RGBA:
+						VoxelManager.Log( "Found RGBA chunk", LogLevel.Debug, "Magica" );
+
 						colors = new uint[256];
 						colors[0] = _defaultColors[0];
 
@@ -81,6 +85,8 @@ namespace Voxel
 
 						break;
 					case SIZE:
+						VoxelManager.Log( "Found SIZE chunk", LogLevel.Debug, "Magica" );
+
 						uint x = stream.ReadStructureFromStream<uint>();
 						uint y = stream.ReadStructureFromStream<uint>();
 
@@ -90,6 +96,8 @@ namespace Voxel
 
 						break;
 					default:
+						VoxelManager.Log( "Skipping unknown chunk", LogLevel.Debug, "Magica" );
+
 						stream.Seek( chunk.Size, SeekOrigin.Current );
 						break;
 				}
