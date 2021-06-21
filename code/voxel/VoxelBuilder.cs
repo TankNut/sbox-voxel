@@ -46,6 +46,7 @@ namespace Voxel
 		public Vector3 Maxs { get; private set; } = new Vector3( float.MinValue );
 
 		private Dictionary<VoxelPosition, VoxelData> _data = new();
+		private FlatGrid3<VoxelData> _grid;
 
 		[StructLayout( LayoutKind.Sequential )]
 		private struct VoxelVertex
@@ -77,9 +78,9 @@ namespace Voxel
 
 
 
-		public bool Exists( int x, int y, int z, VoxelGrid grid )
+		public bool Exists( int x, int y, int z )
 		{
-			return grid.Get( x, y, z, Mins ).Exists;
+			return _grid.Get( x, y, z, Mins ).Exists;
 		}
 
 		public void Set( int x, int y, int z, Color color )
@@ -97,12 +98,23 @@ namespace Voxel
 			};
 		}
 
+		private void GenerateGrid()
+		{
+			Vector3 size = Maxs - Mins + new Vector3( 1.0f );
+
+			_grid = new FlatGrid3<VoxelData>( (int)size.x, (int)size.y, (int)size.z );
+
+			foreach ( KeyValuePair<VoxelPosition, VoxelData> pair in _data )
+			{
+				VoxelData voxelData = pair.Value;
+
+				_grid.Set( voxelData.Position.x - (int)Mins.x, voxelData.Position.y - (int)Mins.y, voxelData.Position.z - (int)Mins.z, voxelData );
+			}
+		}
+
 		private List<VoxelVertex> GenerateMesh()
 		{
 			List<VoxelVertex> vertices = new();
-
-			Vector3 size = Maxs - Mins + new Vector3( 1.0f );
-			VoxelGrid grid = new VoxelGrid( (int)size.x, (int)size.y, (int)size.z ).Load( _data, Mins );
 
 			foreach ( KeyValuePair<VoxelPosition, VoxelData> pair in _data )
 			{
@@ -120,19 +132,19 @@ namespace Voxel
 
 				Vector3 position = new Vector3( x, y, z ) - Pivot;
 
-				if ( !Exists( x + 1, y, z, grid ) )
+				if ( !Exists( x + 1, y, z ) )
 					CreateQuad( vertices, new Ray( position + f, f.Normal ), l, u, voxelData.Color );
-				if ( !Exists( x - 1, y, z, grid ) )
+				if ( !Exists( x - 1, y, z ) )
 					CreateQuad( vertices, new Ray( position - f, -f.Normal ), l, -u, voxelData.Color );
 
-				if ( !Exists( x, y + 1, z, grid ) )
+				if ( !Exists( x, y + 1, z ) )
 					CreateQuad( vertices, new Ray( position + l, l.Normal ), -f, u, voxelData.Color );
-				if ( !Exists( x, y - 1, z, grid ) )
+				if ( !Exists( x, y - 1, z ) )
 					CreateQuad( vertices, new Ray( position - l, -l.Normal ), f, u, voxelData.Color );
 
-				if ( !Exists( x, y, z + 1, grid ) )
+				if ( !Exists( x, y, z + 1 ) )
 					CreateQuad( vertices, new Ray( position + u, u.Normal ), f, l, voxelData.Color );
-				if ( !Exists( x, y, z - 1, grid ) )
+				if ( !Exists( x, y, z - 1 ) )
 					CreateQuad( vertices, new Ray( position - u, -u.Normal ), f, -l, voxelData.Color );
 			}
 
@@ -163,12 +175,14 @@ namespace Voxel
 			VoxelManager.Log( $"Pivot: {Pivot}", LogLevel.Debug, "Builder" );
 			VoxelManager.Log( $"Blocks: {_data.Count:n0}", LogLevel.Debug, "Builder" );
 
-			Vector3 mins = Mins - Pivot - new Vector3( 0.5f );
-			Vector3 maxs = Maxs - Pivot + new Vector3( 0.5f );
+			GenerateGrid();
 
 			List<VoxelVertex> vertices = GenerateMesh();
 
 			VoxelManager.Log( $"Vertices: {vertices.Count:n0} ({vertices.Count / 6:n0} quads)", LogLevel.Debug, "Builder" );
+
+			Vector3 mins = Mins - Pivot - new Vector3( 0.5f );
+			Vector3 maxs = Maxs - Pivot + new Vector3( 0.5f );
 
 			Mesh mesh = new Mesh( Material.Load( "materials/default/vertex_color.vmat" ) );
 

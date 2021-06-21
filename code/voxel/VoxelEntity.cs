@@ -28,7 +28,7 @@ namespace Voxel
 				DebugOverlay.Text( Position,
 					$"Model: {Model}\n" +
 					$"Blocks: {VoxelModel.Volume:n0}\n" +
-					$"Vertices: {VoxelModel.Vertices:n0}", Color.Red );
+					$"Vertices: {VoxelModel.Vertices:n0} ({VoxelModel.Vertices / 6:n0} quads)", Color.Red );
 
 				DebugOverlay.Axis( Position, Rotation, depthTest: false );
 			}
