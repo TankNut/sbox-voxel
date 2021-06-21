@@ -14,6 +14,12 @@
 			_data = new T[x * y * z];
 		}
 
+		public T this[int x, int y, int z]
+		{
+			get => Get( x, y, z );
+			set => Set( x, y, z, value );
+		}
+
 		public T Get( int x, int y, int z )
 		{
 			if ( x < 0 || y < 0 || z < 0 || x >= _sizeX || y >= _sizeY || z >= _sizeZ )
