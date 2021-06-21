@@ -5,6 +5,38 @@ using System.Runtime.InteropServices;
 
 namespace Voxel
 {
+	public struct VoxelData
+	{
+		public bool Exists;
+		public Color Color;
+		public VoxelPosition Position;
+	}
+
+	public struct VoxelPosition
+	{
+		public int x;
+		public int y;
+		public int z;
+
+		public Vector3 Vector => new Vector3( x, y, z );
+
+		public VoxelPosition( int x, int y, int z )
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+
+		public override int GetHashCode() => HashCode.Combine( x, y, z );
+
+		public override bool Equals( object obj ) => obj is VoxelPosition other && Equals( other );
+
+		public bool Equals( VoxelPosition other )
+		{
+			return x == other.x && y == other.y && z == other.z;
+		}
+	}
+
 	public class VoxelBuilder
 	{
 		public ImageFormat ColorFormat;
@@ -14,31 +46,6 @@ namespace Voxel
 		public Vector3 Maxs { get; private set; } = new Vector3( float.MinValue );
 
 		private Dictionary<VoxelPosition, VoxelData> _data = new();
-
-		private struct VoxelPosition
-		{
-			public int x;
-			public int y;
-			public int z;
-
-			public Vector3 Vector => new Vector3( x, y, z );
-
-			public VoxelPosition( int x, int y, int z )
-			{
-				this.x = x;
-				this.y = y;
-				this.z = z;
-			}
-
-			public override int GetHashCode() => HashCode.Combine( x, y, z );
-
-			public override bool Equals( object obj ) => obj is VoxelPosition other && Equals( other );
-
-			public bool Equals( VoxelPosition other )
-			{
-				return x == other.x && y == other.y && z == other.z;
-			}
-		}
 
 		[StructLayout( LayoutKind.Sequential )]
 		private struct VoxelVertex
@@ -68,15 +75,11 @@ namespace Voxel
 			};
 		}
 
-		private struct VoxelData
-		{
-			public Color Color;
-			public VoxelPosition Position;
-		}
 
-		public bool Exists( int x, int y, int z )
+
+		public bool Exists( int x, int y, int z, VoxelGrid grid )
 		{
-			return _data.ContainsKey( new VoxelPosition( x, y, z ) );
+			return grid.Get( x, y, z, Mins ).Exists;
 		}
 
 		public void Set( int x, int y, int z, Color color )
@@ -88,6 +91,7 @@ namespace Voxel
 
 			_data[position] = new VoxelData()
 			{
+				Exists = true,
 				Color = color,
 				Position = position
 			};
@@ -96,6 +100,9 @@ namespace Voxel
 		private List<VoxelVertex> GenerateMesh()
 		{
 			List<VoxelVertex> vertices = new();
+
+			Vector3 size = Maxs - Mins + new Vector3( 1.0f );
+			VoxelGrid grid = new VoxelGrid( (int)size.x, (int)size.y, (int)size.z ).Load( _data, Mins );
 
 			foreach ( KeyValuePair<VoxelPosition, VoxelData> pair in _data )
 			{
@@ -113,19 +120,19 @@ namespace Voxel
 
 				Vector3 position = new Vector3( x, y, z ) - Pivot;
 
-				if ( !Exists( x + 1, y, z ) )
+				if ( !Exists( x + 1, y, z, grid ) )
 					CreateQuad( vertices, new Ray( position + f, f.Normal ), l, u, voxelData.Color );
-				if ( !Exists( x - 1, y, z ) )
+				if ( !Exists( x - 1, y, z, grid ) )
 					CreateQuad( vertices, new Ray( position - f, -f.Normal ), l, -u, voxelData.Color );
 
-				if ( !Exists( x, y + 1, z ) )
+				if ( !Exists( x, y + 1, z, grid ) )
 					CreateQuad( vertices, new Ray( position + l, l.Normal ), -f, u, voxelData.Color );
-				if ( !Exists( x, y - 1, z ) )
+				if ( !Exists( x, y - 1, z, grid ) )
 					CreateQuad( vertices, new Ray( position - l, -l.Normal ), f, u, voxelData.Color );
 
-				if ( !Exists( x, y, z + 1 ) )
+				if ( !Exists( x, y, z + 1, grid ) )
 					CreateQuad( vertices, new Ray( position + u, u.Normal ), f, l, voxelData.Color );
-				if ( !Exists( x, y, z - 1 ) )
+				if ( !Exists( x, y, z - 1, grid ) )
 					CreateQuad( vertices, new Ray( position - u, -u.Normal ), f, -l, voxelData.Color );
 			}
 
