@@ -181,7 +181,7 @@ namespace Voxel
 
 			builder.AddMesh( mesh );
 			builder.AddCollisionBox( box.Size * 0.5f, box.Center );
-			builder.WithMass( _data.Count );
+			builder.WithMass( 1000 );
 
 			return new VoxelModel()
 			{
