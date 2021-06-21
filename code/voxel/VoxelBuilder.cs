@@ -5,38 +5,6 @@ using System.Runtime.InteropServices;
 
 namespace Voxel
 {
-	public struct VoxelData
-	{
-		public bool Exists;
-		public Color Color;
-		public VoxelPosition Position;
-	}
-
-	public struct VoxelPosition
-	{
-		public int x;
-		public int y;
-		public int z;
-
-		public Vector3 Vector => new Vector3( x, y, z );
-
-		public VoxelPosition( int x, int y, int z )
-		{
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-
-		public override int GetHashCode() => HashCode.Combine( x, y, z );
-
-		public override bool Equals( object obj ) => obj is VoxelPosition other && Equals( other );
-
-		public bool Equals( VoxelPosition other )
-		{
-			return x == other.x && y == other.y && z == other.z;
-		}
-	}
-
 	public class VoxelBuilder
 	{
 		public ImageFormat ColorFormat;
@@ -47,6 +15,38 @@ namespace Voxel
 
 		private Dictionary<VoxelPosition, VoxelData> _data = new();
 		private FlatGrid3<VoxelData> _grid;
+
+		private struct VoxelData
+		{
+			public bool Exists;
+			public Color Color;
+			public VoxelPosition Position;
+		}
+
+		private struct VoxelPosition
+		{
+			public int x;
+			public int y;
+			public int z;
+
+			public Vector3 Vector => new Vector3( x, y, z );
+
+			public VoxelPosition( int x, int y, int z )
+			{
+				this.x = x;
+				this.y = y;
+				this.z = z;
+			}
+
+			public override int GetHashCode() => HashCode.Combine( x, y, z );
+
+			public override bool Equals( object obj ) => obj is VoxelPosition other && Equals( other );
+
+			public bool Equals( VoxelPosition other )
+			{
+				return x == other.x && y == other.y && z == other.z;
+			}
+		}
 
 		[StructLayout( LayoutKind.Sequential )]
 		private struct VoxelVertex
@@ -75,8 +75,6 @@ namespace Voxel
 				new VertexAttribute(VertexAttributeType.Color, VertexAttributeFormat.Float32, 4)
 			};
 		}
-
-
 
 		public bool Exists( int x, int y, int z )
 		{
